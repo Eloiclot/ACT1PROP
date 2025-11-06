@@ -315,4 +315,14 @@ public class Mapa {
     
     //@TODO: (opcionalment) el que cregueu convenient per ampliar la classe.
 
+    /**
+     * Mètode públic per obtenir el valor d'una cel·la.
+     * Necessari per la implementació de les heurístiques.
+     * @param x Fila
+     * @param y Columna
+     * @return El codi de la cel·la (veure constants PARET, ESPAI, SORTIDA, o char de clau/porta)
+     */
+    public int getCell(int x, int y) {
+        return getCell(new Posicio(x, y));
+    }
 }
