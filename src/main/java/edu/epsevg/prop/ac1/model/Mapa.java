@@ -199,16 +199,56 @@ public class Mapa {
         return nou;
     }
 
-    /** 
-     * Obtenir els moviments possibles des de l'estat actual
+/** * Obtenir els moviments possibles des de l'estat actual
      * @return la llista de moviments possibles des de l'estat actual:
-     *  - per cada agent (1..k) i cada direcció valida (que no sigui mur, si és una porta ha de ser obrible i sense col·lisió amb d'altres agents)
-     *  - indica recullClau=true si el destí té una clau que encara no s'ha recollit
+     * - per cada agent (1..k) i cada direcció valida (que no sigui mur, si és una porta ha de ser obrible i sense col·lisió amb d'altres agents)
+     * - indica recullClau=true si el destí té una clau que encara no s'ha recollit
      */
     public List<Moviment> getAccionsPossibles() {
         List<Moviment> res = new ArrayList<>();
         // ===============================================
         //@TODO: A IMPLEMENTAR !!!!!!
+        
+        for (int i = 0; i < agents.size(); i++) {
+            int agentId = i + 1; // ID de l'agent (1, 2, ...)
+            Posicio posAgentActual = agents.get(i);
+
+            for (Direccio d : Direccio.values()) {
+                Posicio dest = posAgentActual.translate(d);
+                int cell = getCell(dest);
+
+                // 1. Comprovar si és Paret
+                if (cell == PARET) continue;
+
+                // 2. Comprovar Col·lisions amb altres agents [cite: 32]
+                boolean colisio = false;
+                for (Posicio pAgent : agents) {
+                    if (pAgent.equals(dest)) {
+                        colisio = true;
+                        break;
+                    }
+                }
+                if (colisio) continue;
+
+                // 3. Comprovar Portes [cite: 20]
+                if (Character.isUpperCase(cell)) {
+                    if (!portaObrible((char) cell)) {
+                        continue; // Porta tancada
+                    }
+                }
+                
+                // 4. Comprovar si es recull clau [cite: 23, 49]
+                boolean recullClau = false;
+                if (Character.isLowerCase(cell)) {
+                    if (!teClau((char) cell)) {
+                        recullClau = true;
+                    }
+                }
+
+                // Si hem arribat aquí, el moviment és vàlid
+                res.add(new Moviment(agentId, d, recullClau));
+            }
+        }
         // ===============================================
         return res;
     }
@@ -227,18 +267,29 @@ public class Mapa {
         
         // ===============================================
         //@TODO: A IMPLEMENTAR !!!!!!
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Mapa mapa = (Mapa) o;
+
+        // 1. Comprovar clausMask
+        if (clausMask != mapa.clausMask) return false;
+
+        // 2. Comprovar posició agents
+        // Fem servir equals de ArrayList, que comprova element a element
+        return agents.equals(mapa.agents);
         // ===============================================
-        
-        return true;
     }
 
     @Override
     public int hashCode() {
         // ===============================================
         //@TODO: A IMPLEMENTAR !!!!!!
+        // Generem un hash a partir dels mateixos camps que fem servir a equals()
+        int result = agents.hashCode();
+        result = 31 * result + clausMask;
+        return result;
         // ===============================================
-        
-        return 0;
     }
 
     @Override
