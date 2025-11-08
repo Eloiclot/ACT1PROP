@@ -90,6 +90,7 @@ public class Mapa {
         this.agents = new ArrayList<>();
         for (Posicio p : other.agents) this.agents.add(new Posicio(p.x, p.y));
         this.clausMask = other.clausMask;
+        this.sortida = other.sortida;
     }
 
     /**
