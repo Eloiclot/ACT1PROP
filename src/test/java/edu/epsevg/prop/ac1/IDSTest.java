@@ -12,13 +12,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public class IDSTest {
     @Test
     public void testIDSMapA() throws Exception {
-        /*
+        
         Mapa m = new Mapa(Path.of("src/main/resources/mapA.map"));
         CercaIDS ids = new CercaIDS(true);
         ResultatCerca r = new ResultatCerca();
         ids.ferCerca(m, r);
         assertNotNull(r.getCami());
         assertEquals(5, r.getCami().size()); // seguint l'enunciat, solucio optima 5
-        */
+        
     }
 }
